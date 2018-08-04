@@ -1,0 +1,281 @@
+<head>
+  <!-- Plotly.js -->
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script src="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.jquery.min.js"></script>
+  <link href="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.min.css" rel="stylesheet"/>
+
+</head>
+
+<style>
+
+  /* Style The Dropdown Button */
+  .dropbtn {
+    background-color: black;
+    color: white;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    margin-left: 600px;
+  }
+
+  /* The container <div> - needed to position the dropdown content */
+  .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+
+  /* Dropdown Content (Hidden by Default) */
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    margin-left: 600px;
+  }
+
+  /* Links inside the dropdown */
+  .dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+  }
+
+  /* Change color of dropdown links on hover */
+  .dropdown-content a:hover {
+    background-color: black;
+    color: white;
+  }
+
+  /* Show the dropdown menu on hover */
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }
+
+  #button_advanced {
+    background-color: black;
+    border: none;
+    color: #EBC1EE;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+    margin: auto;
+  }
+
+  #button_advanced:hover {
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+  }
+
+  /* Add a black background color to the top navigation */
+  .topnav {
+    background-color: black;
+    overflow: hidden;
+    min-width: 1000px;
+  }
+
+  /* Style the links inside the navigation bar */
+  .topnav a {
+    float: left;
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+    font-family: Arial;
+  }
+
+  /* Change the color of links on hover */
+  .topnav a:hover {
+    background-color: white;
+    color: black;
+  }
+
+  /* Add an active class to highlight the current page */
+  .active {
+    background-color: #EBC1EE;
+    color: black;
+  }
+
+  /* Hide the link that should open and close the topnav on small screens */
+  .topnav .icon {
+    display: none;
+  }
+
+  #alpha {
+    width: 600px;
+    height: 40px;
+    border-width: 2px;
+    border-color: black black black black;
+    margin: auto;
+  }
+
+  #submit {
+    width: 600px;
+    background-color: black;
+    border: none;
+    border-color: #8F1383;
+    color: white;
+    height: 40px;
+    margin-left: 80px;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+  }
+
+  #submit:hover {
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+  }
+
+  .container {
+    position: relative;
+    overflow: hidden;
+    float: left;
+  }
+
+  #left {
+    display: inline-block;
+    float: left;
+  }
+
+  #myDiv {
+    display: inline-block;
+    float: right;
+    margin: auto;
+    overflow: hidden;
+  }
+
+  #table {
+    display: inline-block;
+    margin: auto;
+    border-color: #ad1b9e;
+    overflow: hidden;
+    border-color: black;
+    border-width: 2px
+  }
+
+  p.ex1 {
+    max-width: 600px;
+    max-height: 400px;
+    overflow-y: scroll;
+    margin-left: 80px;
+    background-color: #82CFFD;
+}
+
+</style>
+
+<div class="topnav" id="myTopnav">
+  <a href="#home">Home</a>
+  <a href="#about">About us</a>
+  <a href="#create">Create</a>
+  <a href="#learn">Learn</a>
+  <a href="#faq">FAQ</a>
+  {% if user.username %}
+    <a href="{% url 'graph:logout_user' %}" style="float:right">Logout</a>
+    <a href="#username" style="float:right">{{ user.username }}</a>
+  {% else %}
+    <a href="{% url 'graph:login' %}" style="float:right">Login</a>
+  {% endif %}
+</div>
+
+<br><br>
+
+<form action="" method="post">
+  {% csrf_token %}
+  <select data-placeholder="Choose stocks" multiple class="chosen-select" name="tags">
+    <option value=""></option>
+    <option>RELIANCE</option>
+    <option>HDFCBANK</option>
+    <option>TCS</option>
+    <option>ITC</option>
+    <option>AUROPHARMA</option>
+    <option>HDFC</option>
+    <option>HUL</option>
+    <option>MARUTI</option>
+    <option>INFY</option>
+    <option>ONGC</option>
+    <option>SBIN</option>
+    <option>KOTAKBANK</option>
+    <option>IOC</option>
+    <option>ICICI</option>
+    <option>COALINDIA</option>
+    <option>LT</option>
+    <option>BHARTIARTL</option>
+    <option>NTPC</option>
+    <option>HCLTECH</option>
+    <option>AXIS</option>
+    <option>WIPRO</option>
+    <option>SUNPHARMA</option>
+    <option>VEDL</option>
+    <option>ULTRACEMCO</option>
+    <option>ASIANPAINT</option>
+    <option>INDUSINDBK</option>
+    <option>POWERGRID</option>
+    <option>TATAMOTORS</option>
+    <option>BPCL</option>
+    <option>BAJFINANCE</option>
+    <option>MM</option>
+    <option>BAJAJ_AUTO</option>
+    <option>ADANIPORTS</option>
+    <option>EICHERMOT</option>
+    <option>GAIL</option>
+    <option>TATASTEEL</option>
+    <option>HEROMOTOCO</option>
+    <option>YESBANK</option>
+    <option>INFRATEL</option>
+    <option>TECHM</option>
+    <option>DRREDDY</option>
+    <option>HINDPETRO</option>
+    <option>BOSCHLTD</option>
+    <option>ZEEL</option>
+    <option>IBULHSGFIN</option>
+    <option>HINDALCO</option>
+    <option>AMBUJACEM</option>
+    <option>CIPLA</option>
+    <option>UPL</option>
+    <option>LUPIN</option>
+  </select>
+  <input type="submit">
+</form>
+
+
+<br><br>
+
+<div class="container">
+
+  <div id="left" class="left">
+    <form action="{% url 'graph:backtest2' %}" method="post" id="usrform">
+      {% csrf_token %}
+      <p>Long Entry&nbsp;&nbsp;<input id="alpha" type="text" name="alpha" placeholder="RSI(c,14)>50"></p>
+      <p>Long Exit&nbsp;&nbsp;&nbsp;&nbsp;<input id="alpha" type="text" name="alpha" placeholder="c<0"></p>
+      <p>Quantity&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="alpha" type="text" name="alpha" placeholder="40"></p>
+      <p>Short Entry&nbsp;<input id="alpha" type="text" name="alpha" placeholder="mean_sma(c,10)<c"></p>
+      <p>Short Exit&nbsp;&nbsp;&nbsp;<input id="alpha" type="text" name="alpha" placeholder="RSI(c,14)<35"></p>
+      <p>Quantity&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="alpha" type="text" name="alpha" placeholder="10000000"></p>
+      <input id = "submit" type="submit" value="Submit">
+
+      <br><br>
+
+    </form>
+  </div>
+
+  <br><br>
+
+</div>
+
+    <script>
+
+    $(".chosen-select").chosen({
+      width: "40%",
+      no_results_text: "Oops, nothing found!",
+    });
+
+    </script>
+    </div>
+
+<br><br>

@@ -1,0 +1,210 @@
+<head>
+  <!-- Plotly.js -->
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+
+<style>
+
+  #button1, #button2 {
+    background-color: #AD1B9E;
+    border: none;
+    color: #EBC1EE;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+    margin:auto;
+  }
+
+  #button1:hover {
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+  }
+
+  #table {
+    margin-top: -15px;
+    border-color: #ad1b9e;
+  }
+
+  /* Add a black background color to the top navigation */
+  .topnav {
+    background-color: #AD1B9E;
+    overflow: hidden;
+    min-width: 1000px;
+  }
+
+  /* Style the links inside the navigation bar */
+  .topnav a {
+    float: left;
+    display: block;
+    color: #EBC1EE;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+  }
+
+  /* Change the color of links on hover */
+  .topnav a:hover {
+    background-color: #EBC1EE;
+    color: #AD1B9E;
+  }
+
+  /* Add an active class to highlight the current page */
+  .active {
+    background-color: #EBC1EE;
+    color: black;
+  }
+
+  /* Hide the link that should open and close the topnav on small screens */
+  .topnav .icon {
+    display: none;
+  }
+
+  #alpha {
+    width: 800px;
+    height: 80px;
+    border-width: 2px;
+    border-color: #ff28e9 #AD1B9E #AD1B9E #ff28e9;
+    margin-left: 10px;
+    margin-top: 20px;
+  }
+
+  #submit {
+    width: 800px;
+    background-color: #AD1B9E;
+    border: none;
+    border-color: #8F1383;
+    color: #EBC1EE;
+    height: 40px;
+    margin-top: -2px;
+    margin-left: 10px;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+  }
+
+  #submit:hover {
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+  }
+
+  .container {
+    position: relative;
+    overflow: hidden;
+    margin-left: 85px;
+  }
+
+  @media screen and (max-width: 420px) {
+  #button2 {
+    margin-top: 10px;
+  }
+}
+
+  #left {
+    float: left;
+  }
+
+  #myDiv {
+    float: right;
+    width: 700px;
+    height: 600px;
+    margin-top: -65px;
+    margin-right: -45px;
+  }
+
+  .contain {
+    width: 600px;
+    height: 600px;
+  }
+
+  .table {
+    margin-left: 85px;
+    overflow-x: scroll;
+    width: 1300px;
+  }
+
+</style>
+
+<div class="topnav" id="myTopnav">
+  <a href="#home">HOME</a>
+  <a href="#about">ABOUT US</a>
+  <a href="#create">CREATE</a>
+  <a href="#learn">LEARN</a>
+  <a href="#faq">FAQ</a>
+  {% if user.username %}
+    <a href="{% url 'graph:logout_user' %}" style="float:right">LOGOUT</a>
+    <a href="#username" style="float:right">{{ user.username }}</a>
+  {% else %}
+    <a href="{% url 'graph:login' %}" style="float:right">LOGIN</a>
+  {% endif %}
+</div>
+
+<br>
+
+<div class="container">
+  <button type="button" id="button1">Positions</button>
+  <button type="button" id="button2">PNL</button>
+</div>
+
+<br>
+<div class="contain">
+  <div class="table" id="table"></div>
+</div>
+<script>
+
+var values = {{ values2 | safe }}
+var header = {{ header2 | safe }}
+
+var fillArray = function(value, len){
+  var arr=[];
+  for (var i=0 ; i<len-1; i++){
+    arr.push(value);
+  }
+  arr.unshift(14);
+  return arr;
+};
+
+var data = [{
+  type: 'table',
+  //columnorder: [1,2,3,4,5,6,7],
+  //columnwidth: [40, 65, 65, 60, 60, 60, 60],
+  columnwidth: fillArray(7,header.length-1),
+  header: {
+    values: header,
+    align: ["center"],
+    line: {width: 0, color: '#506784'},
+    fill: {color: '#ad1b9e'},
+    font: {family: "Arial", size: 12, color: "white"}
+  },
+  cells: {
+    values: values,
+    align: ["center"],
+    line: {color: "#506784", width: 0},
+    fill: {color: ['#EBC1EE']},
+    font: {family: "Arial", size: 11, color: ["#506784"]}
+  }
+}];
+
+var layout = {
+  height: 600,
+  width: 1600,
+  margin: {
+    l: 0,
+    r: 10,
+    b: 0,
+    t: 10,
+    pad: 4
+  }
+};
+
+Plotly.plot('table', data, layout);
+
+</script>
+
+<script type="text/javascript">
+    document.getElementById("button1").onclick = function () {
+        location.href = "shares";
+    };
+    document.getElementById("button2").onclick = function () {
+        location.href = "pnl";
+    };
+</script>

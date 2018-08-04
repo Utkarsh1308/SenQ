@@ -1,0 +1,355 @@
+<head>
+  <!-- Plotly.js -->
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script src="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.jquery.min.js"></script>
+  <link href="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.min.css" rel="stylesheet"/>
+
+</head>
+
+<style>
+
+  /* Style The Dropdown Button */
+  .dropbtn {
+    background-color: black;
+    color: white;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    margin-left: 600px;
+  }
+
+  /* The container <div> - needed to position the dropdown content */
+  .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+
+  /* Dropdown Content (Hidden by Default) */
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    margin-left: 600px;
+  }
+
+  /* Links inside the dropdown */
+  .dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+  }
+
+  /* Change color of dropdown links on hover */
+  .dropdown-content a:hover {
+    background-color: black;
+    color: white;
+  }
+
+  /* Show the dropdown menu on hover */
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }
+
+  #button_advanced {
+    background-color: black;
+    border: none;
+    color: #EBC1EE;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+    margin: auto;
+  }
+
+  #button_advanced:hover {
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+  }
+
+  /* Add a black background color to the top navigation */
+  .topnav {
+    background-color: black;
+    overflow: hidden;
+    min-width: 1000px;
+  }
+
+  /* Style the links inside the navigation bar */
+  .topnav a {
+    float: left;
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+    font-family: Arial;
+  }
+
+  /* Change the color of links on hover */
+  .topnav a:hover {
+    background-color: white;
+    color: black;
+  }
+
+  /* Add an active class to highlight the current page */
+  .active {
+    background-color: #EBC1EE;
+    color: black;
+  }
+
+  /* Hide the link that should open and close the topnav on small screens */
+  .topnav .icon {
+    display: none;
+  }
+
+  #alpha {
+    width: 600px;
+    height: 40px;
+    border-width: 2px;
+    border-color: black black black black;
+    margin: auto;
+  }
+
+  #submit {
+    width: 600px;
+    background-color: black;
+    border: none;
+    border-color: #8F1383;
+    color: white;
+    height: 40px;
+    margin-left: 80px;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+  }
+
+  #submit:hover {
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+  }
+
+  .container {
+    position: relative;
+    overflow: hidden;
+    float: left;
+  }
+
+  #left {
+    display: inline-block;
+    float: left;
+  }
+
+  #myDiv {
+    display: inline-block;
+    float: right;
+    margin: auto;
+    overflow: hidden;
+  }
+
+  #table {
+    display: inline-block;
+    margin: auto;
+    border-color: #ad1b9e;
+    overflow: hidden;
+    border-color: black;
+    border-width: 2px
+  }
+
+  p.ex1 {
+    max-width: 600px;
+    max-height: 400px;
+    overflow-y: scroll;
+    margin-left: 80px;
+    background-color: #82CFFD;
+}
+
+</style>
+
+<div class="topnav" id="myTopnav">
+  <a href="#home">Home</a>
+  <a href="#about">About us</a>
+  <a href="#create">Create</a>
+  <a href="#learn">Learn</a>
+  <a href="#faq">FAQ</a>
+  {% if user.username %}
+    <a href="{% url 'graph:logout_user' %}" style="float:right">Logout</a>
+    <a href="#username" style="float:right">{{ user.username }}</a>
+  {% else %}
+    <a href="{% url 'graph:login' %}" style="float:right">Login</a>
+  {% endif %}
+</div>
+
+<br><br>
+
+<form action="" method="post">
+  {% csrf_token %}
+  <select data-placeholder="Choose stocks" multiple class="chosen-select" name="tags">
+    <option value=""></option>
+    <option>RELIANCE</option>
+    <option>HDFCBANK</option>
+    <option>TCS</option>
+    <option>ITC</option>
+    <option>AUROPHARMA</option>
+    <option>HDFC</option>
+    <option>HUL</option>
+    <option>MARUTI</option>
+    <option>INFY</option>
+    <option>ONGC</option>
+    <option>SBIN</option>
+    <option>KOTAKBANK</option>
+    <option>IOC</option>
+    <option>ICICI</option>
+    <option>COALINDIA</option>
+    <option>LT</option>
+    <option>BHARTIARTL</option>
+    <option>NTPC</option>
+    <option>HCLTECH</option>
+    <option>AXIS</option>
+    <option>WIPRO</option>
+    <option>SUNPHARMA</option>
+    <option>VEDL</option>
+    <option>ULTRACEMCO</option>
+    <option>ASIANPAINT</option>
+    <option>INDUSINDBK</option>
+    <option>POWERGRID</option>
+    <option>TATAMOTORS</option>
+    <option>BPCL</option>
+    <option>BAJFINANCE</option>
+    <option>MM</option>
+    <option>BAJAJ_AUTO</option>
+    <option>ADANIPORTS</option>
+    <option>EICHERMOT</option>
+    <option>GAIL</option>
+    <option>TATASTEEL</option>
+    <option>HEROMOTOCO</option>
+    <option>YESBANK</option>
+    <option>INFRATEL</option>
+    <option>TECHM</option>
+    <option>DRREDDY</option>
+    <option>HINDPETRO</option>
+    <option>BOSCHLTD</option>
+    <option>ZEEL</option>
+    <option>IBULHSGFIN</option>
+    <option>HINDALCO</option>
+    <option>AMBUJACEM</option>
+    <option>CIPLA</option>
+    <option>UPL</option>
+    <option>LUPIN</option>
+  </select>
+  <input type="submit">
+</form>
+
+
+<br><br>
+
+<div class="container">
+
+  <div id="left" class="left">
+    <form action="{% url 'graph:plot' %}" method="post" id="usrform">
+      {% csrf_token %}
+      <p>Long Entry&nbsp;&nbsp;<input id="alpha" type="text" name="alpha" placeholder="RSI(c,14)>50"></p>
+      <p>Long Exit&nbsp;&nbsp;&nbsp;&nbsp;<input id="alpha" type="text" name="alpha" placeholder="c<0"></p>
+      <p>Quantity&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="alpha" type="text" name="alpha" placeholder="40"></p>
+      <p>Short Entry&nbsp;<input id="alpha" type="text" name="alpha" placeholder="mean_sma(c,10)<c"></p>
+      <p>Short Exit&nbsp;&nbsp;&nbsp;<input id="alpha" type="text" name="alpha" placeholder="RSI(c,14)<35"></p>
+      <p>Quantity&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="alpha" type="text" name="alpha" placeholder="10000000"></p>
+      <input id = "submit" type="submit" value="Submit">
+
+      <br><br>
+
+      <p class="ex1">
+          Enter long position on 2016-07-11 Quantity: 40 at 458.0<br>
+          Exit long position on 2016-07-22 Quantity: 40 at 454.8 PNL: -128.0 in 9 days<br>
+          Enter long position on 2016-07-25 Quantity: 40 at 464.6<br>
+          Exit long position on 2016-10-17 Quantity: 40 at 531.0 PNL: 2656.0 in 55 days<br>
+          Exit short position on 2016-11-15 Quantity: 12 at 483.0 PNL: -1189.8 in 178 days<br>
+          Enter short position on 2016-11-29 Quantity: 12 at 454.0<br>
+          Enter long position on 2017-01-02 Quantity: 40 at 453.05<br>
+          Exit long position on 2017-02-28 Quantity: 40 at 504.6 PNL: 2062.0 in 39 days<br>
+          Enter long position on 2017-03-01 Quantity: 40 at 510.0<br>
+          Exit long position on 2017-03-03 Quantity: 40 at 500.0 PNL: -400.0 in 2 days<br>
+          Enter long position on 2017-03-07 Quantity: 40 at 509.0<br>
+          Exit long position on 2017-04-17 Quantity: 40 at 517.3 PNL: 332.0 in 26 days<br>
+          Enter long position on 2017-04-21 Quantity: 40 at 536.85<br>
+          Exit long position on 2017-04-25 Quantity: 40 at 526.5 PNL: -414.0 in 2 days<br>
+          Enter long position on 2017-04-26 Quantity: 40 at 528.0<br>
+          Exit long position on 2017-05-02 Quantity: 40 at 527.5 PNL: -20.0 in 3 days<br>
+          Enter long position on 2017-05-03 Quantity: 40 at 536.0<br>
+          Exit long position on 2017-05-04 Quantity: 40 at 530.0 PNL: -240.0 in 1 days<br>
+          Exit short position on 2017-05-10 Quantity: 12 at 496.0 PNL: -504.0 in 110 days<br>
+          Enter long position on 2017-05-12 Quantity: 40 at 543.7<br>
+          Enter short position on 2017-05-12 Quantity: 12 at 543.7<br>
+          Exit long position on 2017-05-17 Quantity: 40 at 522.6 PNL: -844.0 in 3 days<br>
+          Enter long position on 2017-05-18 Quantity: 40 at 517.0<br>
+          Exit long position on 2017-05-19 Quantity: 40 at 517.0 PNL: 0.0 in 1 days<br>
+          Enter long position on 2017-05-30 Quantity: 40 at 521.8<br>
+          Exit long position on 2017-06-01 Quantity: 40 at 515.6 PNL: -248.0 in 2 days<br>
+          Enter long position on 2017-06-02 Quantity: 40 at 527.0<br>
+          Exit long position on 2017-06-07 Quantity: 40 at 519.0 PNL: -320.0 in 3 days<br>
+          Enter long position on 2017-06-09 Quantity: 40 at 521.5<br>
+          Exit long position on 2017-06-13 Quantity: 40 at 517.5 PNL: -160.0 in 2 days<br>
+          Exit short position on 2017-06-28 Quantity: 12 at 490.0 PNL: 644.4 in 32 days<br>
+          Enter short position on 2017-07-06 Quantity: 12 at 502.0<br>
+          Enter long position on 2017-07-10 Quantity: 40 at 494.7<br>
+          Exit long position on 2017-08-11 Quantity: 40 at 517.0 PNL: 892.0 in 24 days<br>
+          Exit short position on 2017-08-14 Quantity: 12 at 509.2 PNL: -86.4 in 27 days<br>
+          Enter short position on 2017-08-29 Quantity: 12 at 518.4<br>
+          Enter long position on 2017-09-04 Quantity: 40 at 523.0<br>
+          Exit long position on 2017-09-05 Quantity: 40 at 522.0 PNL: -40.0 in 1 days<br>
+          Enter long position on 2017-09-13 Quantity: 40 at 534.1<br>
+          Exit long position on 2017-09-25 Quantity: 40 at 520.25 PNL: -554.0 in 8 days<br>
+          Exit short position on 2017-10-18 Quantity: 12 at 490.1 PNL: 339.6 in 35 days<br>
+      </p>
+
+    </form>
+  </div>
+
+  <br><br>
+
+</div>
+
+    <div id="myDiv" class="graph"></div>
+
+    <script>
+    var data = [
+      {
+        x: {{ data_for_x | safe }},
+        y: {{ data_for_y }},
+        fill: 'tonexty',
+        type: 'scatter',
+        fillcolor: '#82CFFD',
+        mode: 'lines',
+        line: {
+          color: '#82CFFD',
+          width: 1.1
+        },
+      }];
+
+      var layout = {
+        height: 600,
+        width: 800,
+        margin: {
+          l: 80,
+          r: 30,
+          b: 80,
+          t: 30,
+          pad: 4
+        },
+        opacity: 0.5,
+      };
+
+    Plotly.newPlot('myDiv', data, layout);
+
+    $(".chosen-select").chosen({
+      width: "40%",
+      no_results_text: "Oops, nothing found!",
+    });
+
+    </script>
+    </div>
+
+<br><br>

@@ -1,0 +1,236 @@
+<head>
+  <!-- Plotly.js -->
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+
+<style>
+
+  #button_advanced {
+    background-color: #AD1B9E;
+    border: none;
+    color: #EBC1EE;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+    margin: auto;
+  }
+
+  #button_advanced:hover {
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+  }
+
+  /* Add a black background color to the top navigation */
+  .topnav {
+    background-color: #AD1B9E;
+    overflow: hidden;
+    min-width: 1000px;
+  }
+
+  /* Style the links inside the navigation bar */
+  .topnav a {
+    float: left;
+    display: block;
+    color: #EBC1EE;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+  }
+
+  /* Change the color of links on hover */
+  .topnav a:hover {
+    background-color: #EBC1EE;
+    color: #AD1B9E;
+  }
+
+  /* Add an active class to highlight the current page */
+  .active {
+    background-color: #EBC1EE;
+    color: black;
+  }
+
+  /* Hide the link that should open and close the topnav on small screens */
+  .topnav .icon {
+    display: none;
+  }
+
+  #alpha {
+    width: 600px;
+    height: 80px;
+    border-width: 2px;
+    border-color: #ff28e9 #AD1B9E #AD1B9E #ff28e9;
+    margin: auto;
+  }
+
+  #submit {
+    width: 600px;
+    background-color: #AD1B9E;
+    border: none;
+    border-color: #8F1383;
+    color: #EBC1EE;
+    height: 40px;
+    margin: auto;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+  }
+
+  #submit:hover {
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+  }
+
+  .container {
+    position: relative;
+    overflow: hidden;
+    float: left;
+  }
+
+  #left {
+    display: inline-block;
+    float: left;
+  }
+
+  #myDiv {
+    display: inline-block;
+    float: right;
+    margin: auto;
+    overflow: hidden;
+  }
+
+  #table {
+    display: inline-block;
+    margin: auto;
+    border-color: #ad1b9e;
+    overflow: hidden;
+    border-color: black;
+    border-width: 2px
+  }
+
+</style>
+
+<div class="topnav" id="myTopnav">
+  <a href="#home">HOME</a>
+  <a href="#about">ABOUT US</a>
+  <a href="#create">CREATE</a>
+  <a href="#learn">LEARN</a>
+  <a href="#faq">FAQ</a>
+  {% if user.username %}
+    <a href="{% url 'graph:logout_user' %}" style="float:right">LOGOUT</a>
+    <a href="#username" style="float:right">{{ user.username }}</a>
+  {% else %}
+    <a href="{% url 'graph:login' %}" style="float:right">LOGIN</a>
+  {% endif %}
+</div>
+
+<br><br>
+
+<div class="container">
+
+  <div id="left" class="left">
+    <form action="{% url 'graph:plot' %}" method="post" id="usrform">
+      {% csrf_token %}
+      <label for="alpha" id="text_for_alpha"><h3>Alpha: </h3></label>
+      {% if form.is_valid %}
+        <input id="alpha" type="text" name="alpha" value="{{ alpha }}">
+      {% else %}
+        <input id="alpha" type="text" name="alpha" value="">
+      {% endif %}
+      <br>
+      <input id = "submit" type="submit" value="SUBMIT">
+    </form>
+  </div>
+
+  {% if form.is_valid %}
+    <br>
+
+    <div class="table" id="table"></div>
+    <script>
+
+    var values = {{ values | safe }}
+
+    var data = [{
+      type: 'table',
+      columnorder: [1,2,3,4,5,6,7],
+      columnwidth: [25, 50, 50, 60, 60, 60, 60],
+      header: {
+        values: ['Year', 'IR', 'Sharpe Ratio', 'Turnover', 'Max Drawdown', 'Yearly Returns', 'Fitness'],
+        align: ["left", "center"],
+        line: {width: 0, color: '#506784'},
+        fill: {color: '#ad1b9e'},
+        font: {family: "Arial", size: 12, color: "white"}
+      },
+      cells: {
+        values: values,
+        align: ["left", "center"],
+        line: {color: "#506784", width: 0},
+        fill: {color: ['#EBC1EE']},
+        font: {family: "Arial", size: 11, color: ["#506784"]}
+      }
+    }];
+
+    var layout = {
+      height: 230,
+      width: 600,
+      margin: {
+        l: 0,
+        r: 10,
+        b: 0,
+        t: 10,
+        pad: 4
+      }
+    };
+
+    Plotly.plot('table', data, layout);
+
+    </script>
+
+    <div class="advanced">
+      <button type="button" id="button_advanced">ADVANCED</button>
+    </div>
+
+  </div>
+
+    <div id="myDiv" class="graph"></div>
+
+    <script>
+    var data = [
+      {
+        x: {{ data_for_x | safe }},
+        y: {{ data_for_y }},
+        fill: 'tonexty',
+        type: 'scatter',
+        fillcolor: '#82CFFD',
+        mode: 'lines',
+        line: {
+          color: '#82CFFD',
+          width: 1.1
+        },
+      }];
+
+      var layout = {
+        height: 600,
+        width: 800,
+        margin: {
+          l: 80,
+          r: 30,
+          b: 80,
+          t: 30,
+          pad: 4
+        },
+        opacity: 0.5,
+      };
+
+    Plotly.newPlot('myDiv', data, layout);
+
+    </script>
+    </div>
+
+    <br>
+
+    <script type="text/javascript">
+        document.getElementById("button_advanced").onclick = function () {
+            location.href = "shares";
+        };
+    </script>
+  {% endif %}
